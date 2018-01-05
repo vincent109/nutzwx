@@ -1,67 +1,54 @@
 package org.nutz.weixin.impl;
 
-import org.nutz.weixin.bean.WxInMsg;
-import org.nutz.weixin.bean.WxOutMsg;
-import org.nutz.weixin.spi.WxHandler;
+import org.nutz.ioc.impl.PropertiesProxy;
+import org.nutz.lang.Strings;
+import org.nutz.weixin.repo.com.qq.weixin.mp.aes.AesException;
+import org.nutz.weixin.repo.com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import org.nutz.weixin.util.Wxs;
 
-public class BasicWxHandler implements WxHandler {
+public class BasicWxHandler extends AbstractWxHandler {
 	
 	protected String token;
 	
-	public BasicWxHandler(String token) {
-		this.token = token;
-	}
+	protected String aeskey;
+	
+	protected WXBizMsgCrypt msgCrypt;
+	
+	protected String appid;
+	
+	protected BasicWxHandler() {}
+    
+    public BasicWxHandler(String token) {
+        this.token = token;
+    }
 
-	public boolean check(String signature, String timestamp, String nonce) {
+	public BasicWxHandler(String token, String aeskey, String appid) {
+        super();
+        this.token = token;
+        this.aeskey = aeskey;
+        this.appid = appid;
+    }
+
+    public boolean check(String signature, String timestamp, String nonce, String key) {
 		return Wxs.check(token, signature, timestamp, nonce);
 	}
-
-	public WxOutMsg text(WxInMsg msg) {
-		return defaultMsg(msg);
+	
+	public WXBizMsgCrypt getMsgCrypt() {
+	    if (msgCrypt == null)
+            try {
+                msgCrypt = new WXBizMsgCrypt(token, aeskey, appid);
+            }
+            catch (AesException e) {
+                throw new RuntimeException(e);
+            }
+	    return msgCrypt;
 	}
-
-	public WxOutMsg image(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg voice(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg video(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg location(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg link(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg eventSubscribe(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg eventScan(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg eventLocation(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg eventClick(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg eventView(WxInMsg msg) {
-		return defaultMsg(msg);
-	}
-
-	public WxOutMsg defaultMsg(WxInMsg msg) {
-		return Wxs.respText("haha -> " + msg.getCreateTime());
+	
+	public BasicWxHandler configure(PropertiesProxy conf, String prefix){
+	    prefix = Strings.sBlank(prefix);
+	    token = conf.check(prefix+"token");
+	    aeskey = conf.get(prefix+"aes");
+	    appid = conf.get(prefix+"appid");
+	    return this;
 	}
 }

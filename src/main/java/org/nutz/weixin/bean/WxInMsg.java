@@ -1,184 +1,269 @@
 package org.nutz.weixin.bean;
 
+import org.nutz.lang.util.NutMap;
 
-public class WxInMsg {
-	
-	private String fromUserName;
-	private String toUserName;
-	private String event;
-	private String eventKey;
-	private String msgType;
-	private String content;
-	private long createTime;
-	private long msgId;
-	private String picUrl;
-	private String mediaId;
-	private String format;
-	private String thumbMediaId;
-	
-	private double location_X;
-	private double location_Y;
-	private double scale;
-	private String label;
+@SuppressWarnings("serial")
+public class WxInMsg extends NutMap {
+    
+    protected transient String _raw;
 
-	private String title;
-	private String description;
-	private String url;
-	
-	public WxInMsg() {
-	}
+    public WxInMsg setFromUserName(String fromUserName){
+        put("fromUserName", fromUserName);
+        return this;
+    }
 
-	public String getFromUserName() {
-		return fromUserName;
-	}
+    public String getFromUserName(){
+        return (String)get("fromUserName");
+    }
 
-	public void setFromUserName(String fromUserName) {
-		this.fromUserName = fromUserName;
-	}
+    public WxInMsg setToUserName(String toUserName){
+        put("toUserName", toUserName);
+        return this;
+    }
 
-	public String getToUserName() {
-		return toUserName;
-	}
+    public String getToUserName(){
+        return (String)get("toUserName");
+    }
 
-	public void setToUserName(String toUserName) {
-		this.toUserName = toUserName;
-	}
+    public WxInMsg setEvent(String event){
+        put("event", event);
+        return this;
+    }
 
-	public String getEvent() {
-		return event;
-	}
+    public String getEvent(){
+        return (String)get("event");
+    }
 
-	public void setEvent(String event) {
-		this.event = event;
-	}
+    public WxInMsg setEventKey(String eventKey){
+        put("eventKey", eventKey);
+        return this;
+    }
 
-	public String getEventKey() {
-		return eventKey;
-	}
+    public String getEventKey(){
+        return (String)get("eventKey");
+    }
 
-	public void setEventKey(String eventKey) {
-		this.eventKey = eventKey;
-	}
+    public WxInMsg setMsgType(String msgType){
+        put("msgType", msgType);
+        return this;
+    }
 
-	public String getMsgType() {
-		return msgType;
-	}
+    public String getMsgType(){
+        return (String)get("msgType");
+    }
 
-	public void setMsgType(String msgType) {
-		this.msgType = msgType;
-	}
+    public WxInMsg setContent(String content){
+        put("content", content);
+        return this;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public String getContent(){
+        return (String)get("content");
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public WxInMsg setCreateTime(long createTime){
+        put("createTime", createTime);
+        return this;
+    }
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public long getCreateTime(){
+        return getLong("createTime", 0);
+    }
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
+    public WxInMsg setMsgID(long msgID){
+        put("msgID", msgID);
+        return this;
+    }
 
-	public long getMsgId() {
-		return msgId;
-	}
+    public long getMsgID(){
+        return getLong("msgID", 0);
+    }
 
-	public void setMsgId(long msgId) {
-		this.msgId = msgId;
-	}
+    public WxInMsg setPicUrl(String picUrl){
+        put("picUrl", picUrl);
+        return this;
+    }
 
-	public String getPicUrl() {
-		return picUrl;
-	}
+    public String getPicUrl(){
+        return (String)get("picUrl");
+    }
 
-	public void setPicUrl(String picUrl) {
-		this.picUrl = picUrl;
-	}
+    public WxInMsg setMediaId(String mediaId){
+        put("mediaId", mediaId);
+        return this;
+    }
 
-	public String getMediaId() {
-		return mediaId;
-	}
+    public String getMediaId(){
+        return (String)get("mediaId");
+    }
 
-	public void setMediaId(String mediaId) {
-		this.mediaId = mediaId;
-	}
+    public WxInMsg setFormat(String format){
+        put("format", format);
+        return this;
+    }
 
-	public String getFormat() {
-		return format;
-	}
+    public String getFormat(){
+        return (String)get("format");
+    }
 
-	public void setFormat(String format) {
-		this.format = format;
-	}
+    public WxInMsg setThumbMediaId(String thumbMediaId){
+        put("thumbMediaId", thumbMediaId);
+        return this;
+    }
 
-	public String getThumbMediaId() {
-		return thumbMediaId;
-	}
+    public String getThumbMediaId(){
+        return (String)get("thumbMediaId");
+    }
 
-	public void setThumbMediaId(String thumbMediaId) {
-		this.thumbMediaId = thumbMediaId;
-	}
+    public WxInMsg setRecognition(String recognition){
+        put("recognition", recognition);
+        return this;
+    }
 
-	public double getLocation_X() {
-		return location_X;
-	}
+    public String getRecognition(){
+        return (String)get("recognition");
+    }
 
-	public void setLocation_X(double location_X) {
-		this.location_X = location_X;
-	}
+    public WxInMsg setLocation_X(double location_X){
+        put("location_X", location_X);
+        return this;
+    }
 
-	public double getLocation_Y() {
-		return location_Y;
-	}
+    public double getLocation_X(){
+        return getDouble("location_X", 0);
+    }
 
-	public void setLocation_Y(double location_Y) {
-		this.location_Y = location_Y;
-	}
+    public WxInMsg setLocation_Y(double location_Y){
+        put("location_Y", location_Y);
+        return this;
+    }
 
-	public double getScale() {
-		return scale;
-	}
+    public double getLocation_Y(){
+        return getDouble("location_Y", 0);
+    }
 
-	public void setScale(double scale) {
-		this.scale = scale;
-	}
+    public WxInMsg setScale(double scale){
+        put("scale", scale);
+        return this;
+    }
 
-	public String getLabel() {
-		return label;
-	}
+    public double getScale(){
+        return getDouble("scale", 0);
+    }
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    public WxInMsg setLabel(String label){
+        put("label", label);
+        return this;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getLabel(){
+        return (String)get("label");
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public WxInMsg setTitle(String title){
+        put("title", title);
+        return this;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getTitle(){
+        return (String)get("title");
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public WxInMsg setDescription(String description){
+        put("description", description);
+        return this;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getDescription(){
+        return (String)get("description");
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	
-	
+    public WxInMsg setUrl(String url){
+        put("url", url);
+        return this;
+    }
+
+    public String getUrl(){
+        return (String)get("url");
+    }
+
+    public WxInMsg setStatus(String status){
+        put("status", status);
+        return this;
+    }
+
+    public String getStatus(){
+        return (String)get("status");
+    }
+
+    public WxInMsg setScanCodeInfo(WxScanCodeInfo scanCodeInfo){
+        put("scanCodeInfo", scanCodeInfo);
+        return this;
+    }
+
+    public WxScanCodeInfo getScanCodeInfo(){
+        return (WxScanCodeInfo)get("scanCodeInfo");
+    }
+
+    public WxInMsg setSendLocationInfo(WxSendLocationInfo sendLocationInfo){
+        put("sendLocationInfo", sendLocationInfo);
+        return this;
+    }
+
+    public WxSendLocationInfo getSendLocationInfo(){
+        return (WxSendLocationInfo)get("sendLocationInfo");
+    }
+
+    public WxInMsg setExtkey(String extkey){
+        put("extkey", extkey);
+        return this;
+    }
+
+    public String getExtkey(){
+        return (String)get("extkey");
+    }
+
+    public WxInMsg setTotalCount(int totalCount){
+        put("totalCount", totalCount);
+        return this;
+    }
+
+    public int getTotalCount(){
+        return getInt("totalCount", 0);
+    }
+
+    public WxInMsg setFilterCount(int filterCount){
+        put("filterCount", filterCount);
+        return this;
+    }
+
+    public int getFilterCount(){
+        return getInt("filterCount", 0);
+    }
+
+    public WxInMsg setSentCount(int sentCount){
+        put("sentCount", sentCount);
+        return this;
+    }
+
+    public int getSentCount(){
+        return getInt("sentCount", 0);
+    }
+
+    public WxInMsg setErrorCount(int errorCount){
+        put("errorCount", errorCount);
+        return this;
+    }
+
+    public int getErrorCount(){
+        return getInt("errorCount", 0);
+    }
+    
+    public String raw() {
+        return _raw;
+    }
+    
+    public void raw(String raw) {
+        this._raw= raw;
+    }
 }

@@ -9,9 +9,12 @@ import java.util.regex.Pattern;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.lang.Lang;
 import org.nutz.weixin.bean.WxMaster;
+import org.nutz.weixin.impl.BasicWxHandler;
 import org.nutz.weixin.impl.WxApiImpl;
 import org.nutz.weixin.spi.WxAPI;
+import org.nutz.weixin.spi.WxHandler;
 
+@Deprecated
 public class WxContext {
 	
 	public static final String DEF = "default";
@@ -21,6 +24,8 @@ public class WxContext {
 	protected Map<String, WxMaster> masters = new HashMap<String, WxMaster>();
 	
 	protected Map<String, WxAPI> apis = new HashMap<String, WxAPI>();
+	
+	protected Map<String, WxHandler> handlers = new HashMap<String, WxHandler>();
 	
 	public WxAPI getAPI(String openid) {
 		if (openid == null)
@@ -51,15 +56,18 @@ public class WxContext {
 			WxMaster def = Lang.map2Object(map, WxMaster.class);
 			masters.put(appid, def);
 			apis.put(appid, new WxApiImpl(def));
+			handlers.put(appid, new BasicWxHandler(def.getToken()));
 		}
 		for (Entry<String, Object> en : map.entrySet()) {
 			String key = en.getKey();
 			if (key.endsWith(".openid")) {
 				key = key.substring(0, key.indexOf('.'));
 				Map<String, Object> tmp = filter(map, key + ".", null, null, null);
+				String openid = tmp.get("openid").toString();
 				WxMaster one = Lang.map2Object(tmp, WxMaster.class);
-				masters.put(key, one);
-				apis.put(key, new WxApiImpl(one));
+				masters.put(openid, one);
+				apis.put(openid, new WxApiImpl(one));
+				handlers.put(openid, new BasicWxHandler(one.getToken()));
 			}
 		}
 	}
@@ -87,7 +95,7 @@ public class WxContext {
      * @param prefix 包含什么前缀,并移除前缀
      * @param include 正则表达式 仅包含哪些key(如果有前缀要求,则已经移除了前缀)
      * @param exclude 正则表达式 排除哪些key(如果有前缀要求,则已经移除了前缀)
-     * @param map 映射map, 原始key--目标key (如果有前缀要求,则已经移除了前缀)
+     * @param keyMap 映射map, 原始key--目标key (如果有前缀要求,则已经移除了前缀)
      * @return 经过过滤的map,与原始map不是同一个对象
      */
     public static Map<String, Object> filter(Map<String, Object> source, String prefix, String include, String exclude, Map<String, String> keyMap) {
@@ -116,4 +124,8 @@ public class WxContext {
 		}
     	return dst;
     }
+    
+    public WxHandler getHandler(String openid) {
+		return handlers.get(openid);
+	}
 }

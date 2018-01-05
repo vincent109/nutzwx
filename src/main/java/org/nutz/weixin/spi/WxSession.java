@@ -2,7 +2,12 @@ package org.nutz.weixin.spi;
 
 import java.util.Enumeration;
 
-public interface WxSession {
+/**
+ *  微信会话
+ *  @author wendal(wendal1985@gmail.com)
+ *
+ */
+public interface WxSession { // 考虑继承HttpSession啦
 
 	public String getId();
 	public long getCreationTime();

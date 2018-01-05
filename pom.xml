@@ -3,22 +3,36 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nutz</groupId>
 	<artifactId>nutzwx</artifactId>
-	<version>2.2-SNAPSHOT</version>
+	<version>1.r.65-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.nutz</groupId>
 			<artifactId>nutz</artifactId>
-			<version>1.b.50</version>
+			<version>1.r.65-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nutz</groupId>
+			<artifactId>nutz-integration-jedis</artifactId>
+			<version>1.r.65-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -30,7 +44,7 @@
 		</license>
 	</licenses>
 
-	<name>ssdb4j</name>
+	<name>nutzwx</name>
 	<url>http://github.com/nutzam/nutzwx</url>
 
 	<properties>
@@ -59,41 +73,48 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<useIncrementalCompilation>false</useIncrementalCompilation>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
+				<version>2.10.3</version>
+				<configuration>
+					<additionalparam>-Xdoclint:none</additionalparam>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>nutzcn-snapshots</id>
+			<name>NutzCN snapshot repository</name>
+			<url>https://jfrog.nutz.cn/artifactory/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype-release-staging</id>
+			<name>Sonatype Nexus release repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement>
+	
+	<repositories>
+		<repository>
+			<id>nutz-snapshots</id>
+			<url>https://jfrog.nutz.cn/artifactory/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
 </project>
