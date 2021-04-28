@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.nutz.http.Http;
 import org.nutz.http.Response;
@@ -54,6 +57,7 @@ import org.nutz.weixin.repo.com.qq.weixin.mp.aes.AesException;
 import org.nutz.weixin.repo.com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import org.nutz.weixin.spi.WxHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class Wxs {
 
@@ -149,11 +153,27 @@ public class Wxs {
      *      支付平台文档</a>
      */
     public static NutMap checkPayReturn(String xml, String key) {
-        NutMap map = Xmls.xmlToMap(xml);
         try {
+            NutMap map = getkPayReturn(xml);
             return checkPayReturnMap(map, key);
         }
         catch (RuntimeException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw Lang.makeThrow("e.wx.pay.re.error : %s", xml);
+        }
+    }
+
+    public static NutMap getkPayReturn(String xml) {
+        try {
+            return Xmls.asMap(xmls().parse(new InputSource(new StringReader(xml)))
+                                          .getDocumentElement());
+        }
+        catch (RuntimeException e) {
+            throw e;
+        }
+        catch (Exception e) {
             throw Lang.makeThrow("e.wx.pay.re.error : %s", xml);
         }
     }
@@ -207,9 +227,8 @@ public class Wxs {
             // DocumentBuilder不支持直接传入Reader,如果直接传InputStream的话又按系统默认编码,所以,用InputSource中转一下
             Reader r = Streams.utf8r(in);
             raw = Lang.readAll(r);
-            map = Xmls.asMap(Xmls.xmls()
-                                 .parse(new InputSource(new StringReader(raw)))
-                                 .getDocumentElement());
+            map = Xmls.asMap(xmls().parse(new InputSource(new StringReader(raw)))
+                                   .getDocumentElement());
         }
         catch (Exception e) {
             throw Lang.wrapThrow(e);
@@ -307,6 +326,15 @@ public class Wxs {
             break;
         case unsubscribe:
             out = handler.eventUnsubscribe(msg);
+            break;
+        case subscribe_msg_popup_event:
+            out = handler.eventSubscribeMsgPopup(msg);
+            break;
+        case subscribe_msg_change_event:
+            out = handler.eventSubscribeMsgChange(msg);
+            break;
+        case subscribe_msg_sent_event:
+            out = handler.eventSubscribeMsgSent(msg);
             break;
         case LOCATION:
             out = handler.eventLocation(msg);
@@ -801,7 +829,22 @@ public class Wxs {
         sb.append(tmpl.render(ctx));
     }
 
-    // public static void main(String[] args) {
-    // System.out.println(pojoClass2MapClass(WxOutMsg.class));
-    // }
+    public static DocumentBuilder xmls()
+            throws ParserConfigurationException, SAXException, IOException {
+        // 修复XXE form
+        // https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=23_5
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        String FEATURE = null;
+        FEATURE = "http://apache.org/xml/features/disallow-doctype-decl";
+        factory.setFeature(FEATURE, true);
+        FEATURE = "http://xml.org/sax/features/external-general-entities";
+        factory.setFeature(FEATURE, false);
+        FEATURE = "http://xml.org/sax/features/external-parameter-entities";
+        factory.setFeature(FEATURE, false);
+        FEATURE = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
+        factory.setFeature(FEATURE, false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+        return factory.newDocumentBuilder();
+    }
 }
